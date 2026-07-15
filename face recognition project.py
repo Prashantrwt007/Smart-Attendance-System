@@ -1,12 +1,18 @@
 import os
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 import tkinter as tk
 from tkinter import Label, Button
 import cv2
 import face_recognition
 from PIL import Image, ImageTk
 import numpy as np
+
+# ==========================================
+# CONFIGURATION MODULE: Set Cooldown Here
+# ==========================================
+# 60 seconds for live interview testing. Change to 3600 for a 1-hour interval.
+COOLDOWN_SECONDS = 60 
 
 # --- STEP 1: EXTRACT FACE SIGNATURE ---
 def get_face_encoding(image_path):
@@ -41,33 +47,59 @@ if not os.path.exists(log_file_path):
     with open(log_file_path, mode='w', newline='') as f:
         csv.writer(f).writerow(["Name", "Date", "Time"])
 
-# DYNAMIC ADVANCEMENT: Pre-load already registered faces for today to prevent duplicates
-logged_today = set()
+# DYNAMIC COOLDOWN TRACKER: Stores last recognized time as a Python datetime object
+# Format mapping structure: {"name": datetime_object}
+last_logged_cache = {}
 current_date_str = datetime.now().strftime("%Y-%m-%d")
 
+# Pre-load logs from history to reconstruct system cache state on startup
 if os.path.exists(log_file_path):
     with open(log_file_path, mode='r') as f:
         reader = csv.reader(f)
-        next(reader, None)  # Skip the CSV header row
+        next(reader, None)  # Skip CSV Header
         for row in reader:
-            if len(row) >= 2 and row[1] == current_date_str:
-                logged_today.add(row[0])
+            if len(row) >= 3 and row[1] == current_date_str:
+                name_entry = row[0]
+                time_str = row[2]
+                try:
+                    # Combine today's date and log string to rebuild object array reference
+                    full_datetime = datetime.strptime(f"{current_date_str} {time_str}", "%Y-%m-%d %H:%M:%S")
+                    # Keep the latest time parsed sequentially from storage
+                    last_logged_cache[name_entry] = full_datetime
+                except ValueError:
+                    continue
 
 
 # --- STEP 3: APPLICATION ACTIONS ---
 video_capture = cv2.VideoCapture(0)
 
 def log_attendance(name):
-    """Appends the recognized individual's timestamps to the CSV sheet dynamically."""
-    if name not in logged_today and name != "Unknown":
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
+    """Logs name to Excel dynamically if the timestamp bypasses the set cooldown duration."""
+    if name == "Unknown":
+        return
+
+    now = datetime.now()
+    
+    # LINE: Check if name exists in tracking dictionary cache
+    if name in last_logged_cache:
+        last_time = last_logged_cache[name]
+        elapsed_time = (now - last_time).total_seconds()
         
-        with open(log_file_path, mode='a', newline='') as f:
-            csv.writer(f).writerow([name, current_date_str, current_time])
-            
-        logged_today.add(name)
-        print(f"[SYSTEM] Logged attendance for: {name}")
+        # LINE: If elapsed seconds are less than threshold parameter loop breaks
+        if elapsed_time < COOLDOWN_SECONDS:
+            remaining = int(COOLDOWN_SECONDS - elapsed_time)
+            # Optional console print to track math operations
+            # print(f"[COOLDOWN] {name} locked out for another {remaining} seconds.")
+            return 
+
+    # Cooldown verification passed: Register entry
+    current_time_str = now.strftime("%H:%M:%S")
+    with open(log_file_path, mode='a', newline='') as f:
+        csv.writer(f).writerow([name, current_date_str, current_time_str])
+        
+    # Update localized processing memory index
+    last_logged_cache[name] = now
+    print(f"[SYSTEM MASTER] Logged attendance for: {name} at {current_time_str}")
 
 def close_application():
     """Safely releases physical hardware assets and kills the window execution loop."""
@@ -76,14 +108,14 @@ def close_application():
     window.quit()
 
 
-# Global tracking variables for performance optimization
+# Execution cycle bounds setup
 frame_counter = 0
 cached_face_locations = []
 cached_face_names = []
 
 # --- STEP 4: LIVE CAMERA UPDATE LOOP ---
 def update_video_stream():
-    """Captures a frame, optimizes processing frame-skips, updates the layout interface."""
+    """Captures frames, shifts arrays, drops process frame overhead to balance execution threads."""
     global frame_counter, cached_face_locations, cached_face_names
     
     ret, frame = video_capture.read()
@@ -91,14 +123,11 @@ def update_video_stream():
         window.after(10, update_video_stream)
         return
 
-    # Process layout orientation
     frame = cv2.flip(frame, 1)
     
-    # PERFORMANCE OPTIMIZATION: Only process face mapping calculations every 4th frame
+    # Matrix performance optimization passing boundary mapping calculations every 4th frame
     if frame_counter % 4 == 0:
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        
-        # Detect coordinates and faces
         cached_face_locations = face_recognition.face_locations(rgb_frame)
         face_encodings = face_recognition.face_encodings(rgb_frame, cached_face_locations)
 
@@ -115,7 +144,7 @@ def update_video_stream():
     frame_counter += 1
     current_frame_names = []
 
-    # UI Graphics Rendering (Runs smoothly on every single frame using cached layout metrics)
+    # Graphics overlay parsing layer
     for (top, right, bottom, left), name in zip(cached_face_locations, cached_face_names):
         if name != "Unknown":
             current_frame_names.append(name)
@@ -124,15 +153,15 @@ def update_video_stream():
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 255, 0), cv2.FILLED)
         cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 0), 1)
 
-    # Render frame inside Tkinter UI frame labels safely
+    # Frame delivery to Tkinter
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     img_tk = ImageTk.PhotoImage(image=Image.fromarray(img))
     video_label.config(image=img_tk)
     video_label.image = img_tk
 
-    # Refresh the UI sidebar display box text list entries
+    # Update GUI list box text
     live_listbox.delete(0, tk.END)
-    for entry in set(current_frame_names):  # Use set here to list unique faces currently visible
+    for entry in set(current_frame_names):
         live_listbox.insert(tk.END, entry)
 
     window.after(10, update_video_stream)
@@ -140,10 +169,10 @@ def update_video_stream():
 
 # --- STEP 5: GRAPHICAL USER INTERFACE (GUI) ---
 window = tk.Tk()
-window.title("Smart Attendance System")
+window.title("Smart Attendance System with Cooldown")
 window.geometry("950x600")
 
-# Setup layout columns
+# Setup layout blocks
 video_label = Label(window)
 video_label.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
@@ -156,9 +185,9 @@ live_listbox.pack(pady=5)
 
 Button(sidebar, text="Stop & Close", command=close_application, bg="#ff4d4d", fg="white", font=("Arial", 11, "bold")).pack(fill="x", pady=30)
 
-# Window close utility integration hook handles natural OS exit triggers cleanly
+# Hardware closure protocol handling bound interfaces
 window.protocol("WM_DELETE_WINDOW", close_application)
 
-# Launch core application loops
+# Kickoff processing runtime execution loops
 update_video_stream()
 window.mainloop()

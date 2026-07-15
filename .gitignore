@@ -1,5 +1,0 @@
-# Ignore private face database images
-persons/
-
-# Ignore local attendance spreadsheets
-*.csv
