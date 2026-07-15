@@ -22,7 +22,7 @@ A real-time face recognition desktop application built with Python. Uses a webca
 
 * **Real-time Detection & Recognition** via webcam.
 * **Auto-Loading Database**: Loads known faces from a local `persons/` folder automatically.
-* **Mirror Mode**: Horizontally flipped feed for natural visual interaction.
+* **Mirror Mode**: Horizontally flipped feed (mirror mode) for natural visual interaction.
 * **Smart Cooldown Lock**: Dynamic time-interval check (e.g., 60-second cooldown) to prevent duplicate attendance database spam.
 * **Performance Optimization**: Selective frame processing (runs heavy vector calculations every 4th frame) to reduce CPU overhead.
 * **Automated CSV Logging**: Records entries smoothly without duplicate rows using state recovery on startup.
@@ -32,11 +32,11 @@ A real-time face recognition desktop application built with Python. Uses a webca
 
 ## Tech Stack
 
-* **Language**: Python 3
-* **Face Recognition**: `face_recognition` (dlib-based)
-* **Computer Vision**: OpenCV (`cv2`)
-* **GUI**: Tkinter + PIL
-* **Image Processing**: Pillow
+* **Language** — Python 3
+* **Face Recognition** — `face_recognition` (dlib-based)
+* **Computer Vision** — OpenCV (`cv2`)
+* **GUI** — Tkinter + PIL
+* **Image Processing** — Pillow
 
 ---
 
@@ -54,14 +54,13 @@ Image filename = person's ID/name shown on screen. Example: prashant.jpg → dis
 
 How to Run
 Bash
-# Clone the repository
 git clone [https://github.com/Prashantrwt007/Smart-Attendance-System.git](https://github.com/Prashantrwt007/Smart-Attendance-System.git)
 cd Smart-Attendance-System
 
 # Install dependencies
 pip install face_recognition opencv-python pillow numpy<2.0.0
 
-# Add known face images to the persons/ folder (e.g., prashant.jpg)
+# Add known face images to the persons/ folder (e.g. prashant.jpg)
 
 # Run the application
 python "face recognition project.py"
