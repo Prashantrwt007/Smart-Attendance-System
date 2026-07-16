@@ -61,7 +61,7 @@ Smart-Attendance-System/
 ## How to Run
 
 ```bash
-git clone [https://github.com/Prashantrwt007/Smart-Attendance-System.git](https://github.com/Prashantrwt007/Smart-Attendance-System.git)
+git clone https://github.com/Prashantrwt007/Smart-Attendance-System.git
 cd Smart-Attendance-System
 
 # Install dependencies
