@@ -49,10 +49,10 @@ Smart-Attendance-System/
 │   ├── prashant.jpg
 │   ├── komal.png
 │   └── ...
-└── README.md                     # Project documentation
+└── README.md                     
 Image filename = person's ID/name shown on screen. Example: prashant.jpg → displays prashant when recognized.
 
-## How to Run
+How to Run
 Bash
 # 1. Clone the repository
 git clone https://github.com/Prashantrwt007/Smart-Attendance-System.git
@@ -67,7 +67,7 @@ pip install face_recognition opencv-python pillow numpy<2.0.0
 python "face recognition project.py"
 Note: face_recognition requires dlib which may need CMake and a C++ compiler on Windows. On Linux/Mac it installs cleanly.
 
-## How It Works
+How It Works
 Plaintext
 Webcam Frame
     ↓
@@ -84,8 +84,8 @@ Match found & Cooldown checked      → write log to CSV & update list
 Draw box + name label (smooth rendering on all frames)
     ↓
 Display in Tkinter GUI
-## Project Context
+Project Context
 Course Demonstration — Built as part of an Artificial Intelligence / Computer Vision course to demonstrate real-time image processing, performance optimization, database synchronization, facial encoding, vector comparison, and desktop GUI integration in Python.
 
-## License
+License
 MIT License — Open-source software licensed under standard MIT guidelines.
