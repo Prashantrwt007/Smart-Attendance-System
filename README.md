@@ -2,7 +2,7 @@
 
 A real-time face recognition desktop application built with Python. Uses a webcam feed to detect and identify faces against a database of known individuals — displaying live bounding boxes and logged names in an optimized GUI window with automated attendance spreadsheet sync.
 
-**Repo:** https://github.com/Prashantrwt007/Smart-Attendance-System
+**Repo:** [https://github.com/Prashantrwt007/Smart-Attendance-System](https://github.com/Prashantrwt007/Smart-Attendance-System)
 
 ---
 
@@ -51,24 +51,17 @@ Smart-Attendance-System/
 │   └── ...
 └── README.md                     # Project documentation
 Image filename = person's ID/name shown on screen. Example: prashant.jpg → displays prashant when recognized.
-
 How to Run
-Clone the repository
-
-Bash
+# 1. Clone the repository
 git clone [https://github.com/Prashantrwt007/Smart-Attendance-System.git](https://github.com/Prashantrwt007/Smart-Attendance-System.git)
 cd Smart-Attendance-System
-Install dependencies
 
-Bash
+# 2. Install dependencies
 pip install face_recognition opencv-python pillow numpy<2.0.0
-Add known face images
 
-Put your reference portraits directly into the persons/ folder (e.g., prashant.jpg).
+# 3. Add known face images to the persons/ folder (e.g., prashant.jpg)
 
-Run the application
-
-Bash
+# 4. Run the application
 python "face recognition project.py"
 Note: face_recognition requires dlib which may need CMake and a C++ compiler on Windows. On Linux/Mac it installs cleanly.
 
