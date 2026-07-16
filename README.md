@@ -92,8 +92,8 @@ Draw box + name label (smooth rendering on all frames)
     ↓
 Display in Tkinter GUI
 ```
-Project Context
+Project Context-
 Built as part of an Artificial Intelligence / Computer Vision course to demonstrate real-time image processing, performance optimization, database synchronization, facial encoding, vector comparison, and desktop GUI integration in Python.
 
-License
+License-
 MIT
