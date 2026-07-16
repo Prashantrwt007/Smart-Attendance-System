@@ -2,7 +2,7 @@
 
 A real-time face recognition desktop application built with Python. Uses a webcam feed to detect and identify faces against a database of known individuals — displaying live bounding boxes and logged names in an optimized GUI window with automated attendance spreadsheet sync.
 
-**Repo:** [github.com/Prashantrwt007/Smart-Attendance-System](https://github.com/Prashantrwt007/Smart-Attendance-System)
+**Repo:** https://github.com/Prashantrwt007/Smart-Attendance-System
 
 ---
 
@@ -63,6 +63,7 @@ Install dependencies
 Bash
 pip install face_recognition opencv-python pillow numpy<2.0.0
 Add known face images
+
 Put your reference portraits directly into the persons/ folder (e.g., prashant.jpg).
 
 Run the application
@@ -72,31 +73,24 @@ python "face recognition project.py"
 Note: face_recognition requires dlib which may need CMake and a C++ compiler on Windows. On Linux/Mac it installs cleanly.
 
 How It Works
+Plaintext
 Webcam Frame
-Captures live frames sequentially from your machine's hardware feed.
-
-Selective Frame Skip
-Calculates face coordinates only on every 4th frame to prevent lagging.
-
-Face Detection
-face_recognition.face_locations() locates face boxes.
-
-Vector Comparison
-face_recognition.face_encodings() processes facial geometry into a 128-d coordinate matrix.
-
-Authentication Engine
-Checks face against known hashes and handles the dynamic lock cooldown.
-
-Data Write Back
-Logs name and timestamp to local attendance_log.csv file.
-
-Visual Rendering
-Smoothly outputs bounding boxes with overlays onto the Tkinter GUI.
-
+    ↓
+Selective Frame Skip (Every 4th Frame)
+    ↓
+face_recognition.face_locations()   → finds all face bounding boxes
+    ↓
+face_recognition.face_encodings()   → converts each face to a 128-d vector
+    ↓
+face_recognition.compare_faces()    → compares against known encodings
+    ↓
+Match found & Cooldown checked      → write log to CSV & update list
+    ↓
+Draw box + name label (smooth rendering on all frames)
+    ↓
+Display in Tkinter GUI
 Project Context
-Course Demonstration
-Built as part of an Artificial Intelligence / Computer Vision course to demonstrate real-time image processing, performance optimization, database synchronization, facial encoding, vector comparison, and desktop GUI integration in Python.
+Course Demonstration — Built as part of an Artificial Intelligence / Computer Vision course to demonstrate real-time image processing, performance optimization, database synchronization, facial encoding, vector comparison, and desktop GUI integration in Python.
 
 License
-MIT License
-Open-source software licensed under standard MIT guidelines.
+MIT License — Open-source software licensed under standard MIT guidelines.
