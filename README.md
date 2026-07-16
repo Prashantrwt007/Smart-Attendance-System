@@ -1,9 +1,8 @@
-Markdown
 # Smart Attendance System
 
 A real-time face recognition desktop application built with Python. Uses a webcam feed to detect and identify faces against a database of known individuals — displaying live bounding boxes and logged names in an optimized GUI window with automated attendance spreadsheet sync.
 
-**Repo:** https://github.com/Prashantrwt007/Smart-Attendance-System
+**Repo:** [https://github.com/Prashantrwt007/Smart-Attendance-System](https://github.com/Prashantrwt007/Smart-Attendance-System)
 
 ---
 
@@ -56,7 +55,7 @@ Image filename = person's ID/name shown on screen. Example: prashant.jpg → dis
 How to Run
 Bash
 # 1. Clone the repository
-git clone [https://github.com/Prashantrwt007/Smart-Attendance-System.git](https://github.com/Prashantrwt007/Smart-Attendance-System.git)
+git clone https://github.com/Prashantrwt007/Smart-Attendance-System.git
 cd Smart-Attendance-System
 
 # 2. Install dependencies
