@@ -44,6 +44,7 @@ A real-time face recognition desktop application built with Python. Uses a webca
 
 ## Project Structure
 
+```text
 Smart-Attendance-System/
 ├── face recognition project.py   # Main optimized application
 ├── persons/                      # Folder of known face images
@@ -52,7 +53,7 @@ Smart-Attendance-System/
 │   └── ...
 └── README.md                     # Project documentation
 
-
+```
 > Image filename = person's ID/name shown on screen.
 > Example: `prashant.jpg` → displays `prashant` when recognized.
 
